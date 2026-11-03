@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#10131b" />
+  <title>FitTrack Pro — Performance Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#"><span class="brand-mark">F</span><span>fittrack<span class="brand-pro">PRO</span></span></a>
+      <div class="side-label">WORKSPACE</div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-page="dashboard"><span>▦</span> Dashboard</button>
+        <button class="nav-item" data-page="workouts"><span>＋</span> Workout log</button>
+        <button class="nav-item" data-page="progress"><span>↗</span> Progress</button>
+        <button class="nav-item" data-page="insights"><span>✧</span> Smart insights</button>
+        <button class="nav-item" data-page="calendar"><span>▦</span> Training calendar</button>
+        <button class="nav-item" data-page="body"><span>◉</span> Body & goals</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="side-label">PREFERENCES</div>
+        <button class="nav-item" id="themeBtn"><span>◐</span> Toggle appearance</button>
+        <button class="nav-item" id="backupBtn"><span>⇧</span> Backup / restore</button>
+        <div class="sidebar-note"><div class="note-icon">✦</div><b>Consistency wins.</b><p>Small improvements, repeated daily, create extraordinary results.</p></div>
+        <div class="profile"><div class="avatar">A</div><div><b>Athlete</b><small>Personal workspace</small></div><span class="profile-dots">•••</span></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuBtn">☰</button>
+        <div><div class="eyebrow" id="todayLabel">YOUR TRAINING OVERVIEW</div><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-actions"><span class="live-pill"><i></i> YOUR DATA IS SAVED LOCALLY</span><button class="btn btn-primary" id="quickAdd">＋ Log workout</button></div>
+      </header>
+
+      <section class="page active" id="page-dashboard">
+        <div class="welcome-row"><div><h2>Build strength. Track progress.</h2><p class="muted">Your training performance, all in one place.</p></div><div class="date-chip" id="dateChip"></div></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Total workouts</span><span class="stat-icon purple">▣</span></div><strong id="statWorkouts">0</strong><small class="muted">All-time sessions</small></article>
+          <article class="stat-card"><div class="stat-top"><span>This week</span><span class="stat-icon green">↗</span></div><strong id="statWeek">0</strong><small class="muted">Training sessions</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Training volume</span><span class="stat-icon orange">▤</span></div><strong id="statVolume">0 <em>kg</em></strong><small class="muted">Total lifted · all time</small></article>
+          <article class="stat-card"><div class="stat-top"><span>Personal records</span><span class="stat-icon blue">♛</span></div><strong id="statPR">0</strong><small class="muted">Exercise bests</small></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel chart-panel"><div class="panel-heading"><div><h3>Training activity</h3><p class="muted">Your workout frequency over the last 7 days</p></div><span class="tag">LAST 7 DAYS</span></div><div class="chart-wrap"><canvas id="activityChart"></canvas></div><div class="chart-legend"><span><i class="legend-dot"></i> Workout sessions</span><b id="activityTotal">0 sessions</b></div></article>
+          <article class="panel"><div class="panel-heading"><div><h3>Muscle balance</h3><p class="muted">Sessions by muscle group</p></div></div><div id="muscleBreakdown" class="breakdown"><div class="empty-mini">Log workouts to see your muscle balance.</div></div></article>
+        </div>
+        <div class="content-grid lower-grid">
+          <article class="panel"><div class="panel-heading"><div><h3>Recent workouts</h3><p class="muted">Your latest training activity</p></div><button class="text-btn" data-goto="workouts">View all →</button></div><div id="recentList" class="recent-list"><div class="empty-state">No workouts yet. Log your first session to get started.</div></div></article>
+          <article class="panel highlight-panel"><div class="panel-heading"><div><h3>Coach's corner</h3><p class="muted">A quick improvement to focus on</p></div><span class="sparkle">✦</span></div><div id="dashboardTip" class="coach-tip">Start logging workouts and FitTrack Pro will generate recommendations based on your training history.</div><button class="btn btn-secondary full-btn" data-goto="insights">Explore insights →</button></article>
+        </div>
+      </section>
+
+      <section class="page" id="page-workouts">
+        <div class="section-intro"><div><h2>Workout log</h2><p class="muted">Record every session and keep your training history organized.</p></div><button class="btn btn-primary" id="newWorkoutBtn">＋ New workout</button></div>
+        <article class="panel form-panel" id="workoutFormPanel">
+          <div class="panel-heading"><div><h3 id="formTitle">Log a workout</h3><p class="muted">Add your exercise details below.</p></div><button class="icon-btn" id="closeForm" title="Close">×</button></div>
+          <form id="workoutForm">
+            <input type="hidden" id="editId">
+            <div class="form-grid">
+              <label>Workout date<input type="date" id="workoutDate" required></label>
+              <label>Workout type<select id="workoutType"><option>Strength</option><option>Cardio</option><option>Mobility</option><option>Sports</option></select></label>
+              <label>Muscle group<select id="muscleGroup"><option>Chest</option><option>Back</option><option>Shoulders</option><option>Biceps</option><option>Triceps</option><option>Legs</option><option>Glutes</option><option>Core</option><option>Full body</option><option>Cardio</option><option>Other</option></select></label>
+              <label>Exercise name<input id="exercise" list="exerciseOptions" placeholder="e.g. Bench press" required><datalist id="exerciseOptions"><option>Bench press</option><option>Incline dumbbell press</option><option>Lat pulldown</option><option>Barbell row</option><option>Squat</option><option>Leg press</option><option>Deadlift</option><option>Overhead press</option><option>Bicep curl</option><option>Tricep pushdown</option><option>Plank</option><option>Treadmill</option><option>Cycling</option></datalist></label>
+              <label>Sets<input type="number" id="sets" min="0" max="50" placeholder="4"></label>
+              <label>Reps per set<input type="number" id="reps" min="0" max="500" placeholder="10"></label>
+              <label>Weight (kg)<input type="number" id="weight" min="0" step="0.25" placeholder="40"></label>
+              <label>Duration (minutes)<input type="number" id="duration" min="0" placeholder="45"></label>
+              <label>Effort (RPE 1–10)<input type="number" id="rpe" min="1" max="10" placeholder="8"></label>
+              <label class="wide">Session notes<textarea id="notes" rows="3" placeholder="How did the workout feel? Any technique notes or areas to improve?"></textarea></label>
+            </div>
+            <div class="form-actions"><span class="muted form-hint">Strength volume = sets × reps × weight</span><button type="button" class="btn btn-secondary" id="cancelForm">Cancel</button><button type="submit" class="btn btn-primary" id="saveWorkout">Save workout</button></div>
+          </form>
+        </article>
+        <article class="panel"><div class="panel-heading"><div><h3>Training history</h3><p class="muted" id="historyCount">0 recorded entries</p></div></div><div class="filters"><input id="searchWorkouts" placeholder="⌕ Search exercise or notes..."><select id="filterType"><option value="">All types</option><option>Strength</option><option>Cardio</option><option>Mobility</option><option>Sports</option></select><select id="sortWorkouts"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="heaviest">Highest volume</option></select></div><div class="table-scroll"><table><thead><tr><th>DATE</th><th>EXERCISE</th><th>GROUP</th><th>SETS × REPS</th><th>LOAD</th><th>VOLUME</th><th></th></tr></thead><tbody id="workoutTable"><tr><td colspan="7" class="empty-cell">No workouts recorded yet.</td></tr></tbody></table></div></article>
+      </section>
+
+      <section class="page" id="page-progress">
+        <div class="section-intro"><div><h2>Progress analytics</h2><p class="muted">Understand how your training is changing over time.</p></div></div>
+        <div class="stats-grid compact-stats"><article class="stat-card"><span class="muted">Total lifted volume</span><strong id="progressVolume">0 kg</strong></article><article class="stat-card"><span class="muted">Average session duration</span><strong id="avgDuration">0 min</strong></article><article class="stat-card"><span class="muted">Training days this month</span><strong id="monthDays">0</strong></article><article class="stat-card"><span class="muted">Exercise records</span><strong id="exerciseCount">0</strong></article></div>
+        <div class="content-grid"><article class="panel"><div class="panel-heading"><div><h3>Weekly training volume</h3><p class="muted">Total weight × reps × sets</p></div></div><div class="chart-wrap tall"><canvas id="volumeChart"></canvas></div></article><article class="panel"><div class="panel-heading"><div><h3>Personal records</h3><p class="muted">Highest recorded weight per exercise</p></div></div><div id="prList" class="pr-list"><div class="empty-mini">Your records will appear here.</div></div></article></div>
+        <article class="panel"><div class="panel-heading"><div><h3>Exercise progression</h3><p class="muted">Select an exercise to review its logged performance.</p></div><select id="progressExercise"><option value="">Choose exercise</option></select></div><div class="chart-wrap tall"><canvas id="exerciseChart"></canvas></div><div id="exerciseSummary" class="muted chart-footnote">Choose an exercise with at least one logged entry.</div></article>
+      </section>
+
+      <section class="page" id="page-insights">
+        <div class="section-intro"><div><h2>Smart insights</h2><p class="muted">Practical recommendations generated from your workout records.</p></div><span class="tag">RULE-BASED COACHING</span></div>
+        <div class="insight-banner"><div class="insight-symbol">✧</div><div><h3>Your training, translated into action.</h3><p>Recommendations update automatically as you add more workout data. These are training suggestions, not medical advice.</p></div></div>
+        <div id="insightCards" class="insight-grid"><article class="panel"><h3>Start with your first workout</h3><p class="muted">Once you log sessions, recommendations about consistency, muscle balance and progression will appear here.</p></article></div>
+        <article class="panel"><div class="panel-heading"><div><h3>Training balance</h3><p class="muted">How your logged sessions are distributed.</p></div></div><div id="balanceDetails" class="balance-details"></div></article>
+      </section>
+
+      <section class="page" id="page-calendar">
+        <div class="section-intro"><div><h2>Training calendar</h2><p class="muted">See your consistency and identify gaps in your routine.</p></div><div class="calendar-controls"><button class="btn btn-secondary" id="prevMonth">←</button><b id="calendarMonth"></b><button class="btn btn-secondary" id="nextMonth">→</button></div></div>
+        <article class="panel calendar-panel"><div class="calendar-grid weekdays"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div><div class="calendar-grid" id="calendarGrid"></div><div class="calendar-legend"><span><i></i> Workout logged</span><span class="muted">Select a day to view its sessions.</span></div></article>
+        <article class="panel"><h3 id="selectedDayTitle">Selected day</h3><div id="dayWorkouts" class="recent-list"><p class="muted">Select a date on the calendar.</p></div></article>
+      </section>
+
+      <section class="page" id="page-body">
+        <div class="section-intro"><div><h2>Body & goals</h2><p class="muted">Track body metrics and set measurable targets.</p></div></div>
+        <div class="content-grid"><article class="panel"><div class="panel-heading"><div><h3>Log body weight</h3><p class="muted">Track changes over time.</p></div></div><form id="bodyForm" class="body-form"><label>Date<input type="date" id="bodyDate" required></label><label>Weight (kg)<input type="number" id="bodyWeight" min="1" step="0.1" required placeholder="68.0"></label><button class="btn btn-primary" type="submit">Save entry</button></form><div id="weightHistory" class="weight-history"><p class="muted">No body-weight entries yet.</p></div></article><article class="panel"><div class="panel-heading"><div><h3>Set a goal</h3><p class="muted">Choose a target to work towards.</p></div></div><form id="goalForm" class="goal-form"><label>Goal type<select id="goalType"><option>Target body weight</option><option>Weekly workout sessions</option><option>Bench press target (kg)</option><option>Squat target (kg)</option><option>Deadlift target (kg)</option></select></label><label>Target value<input type="number" id="goalValue" min="1" step="0.1" required placeholder="Enter target"></label><button class="btn btn-primary" type="submit">Save goal</button></form><div id="goalList" class="goal-list"><p class="muted">No goals set yet.</p></div></article></div>
+      </section>
+
+      <footer class="footer">FITTRACK PRO <span>·</span> Train with purpose. Measure what matters.</footer>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <div class="modal-backdrop" id="backupModal"><div class="modal panel"><div class="panel-heading"><div><h3>Backup & restore</h3><p class="muted">Keep a copy of your fitness records.</p></div><button class="icon-btn" id="closeBackup">×</button></div><p class="muted">Your data is stored in this browser. Export a JSON backup before clearing browser data or switching devices.</p><div class="backup-actions"><button class="btn btn-primary" id="exportData">↓ Export backup</button><label class="btn btn-secondary file-label">↑ Import backup<input type="file" id="importData" accept=".json,application/json"></label><button class="btn btn-danger" id="clearData">Clear all data</button></div><small class="muted">Importing a backup replaces the current local records.</small></div></div>
+  <div class="timer-fab" id="timerFab"><span>⏱</span><span id="timerDisplay">01:30</span><button id="timerStart">Start</button><button id="timerReset">↻</button></div>
+  <script src="app.js"></script>
+</body>
+</html>
